@@ -1,7 +1,9 @@
+import java.util.Objects;
+
 /* INCAPSULA LA COPPIA ID, TIMESTAMP; ORDINAMENTO DESCRESCENTE PER TIMESTAMP */
 public class PeerViewEntry implements Comparable<PeerViewEntry>{
 
-    int mId;
+    Integer mId;
     Integer mTimeStamp;
 
     public PeerViewEntry(int id, int timestmp){
@@ -25,9 +27,21 @@ public class PeerViewEntry implements Comparable<PeerViewEntry>{
          * is less than, equal to, or greater than the specified object.
          **/
         if(mTimeStamp != null && o != null)
-            return mTimeStamp.compareTo(o.getmTimeStamp());
+            //Se i timestamp sono diversi si ordina per timestamp, altrimenti per id
+            if(mTimeStamp.compareTo(o.getmTimeStamp()) > 0 || mTimeStamp.compareTo(o.getmTimeStamp()) < 0)
+                return mTimeStamp.compareTo(o.getmTimeStamp());
+            else
+                return mId.compareTo(o.getmId());
 
         else return 0;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PeerViewEntry that = (PeerViewEntry) o;
+        return mId.equals(that.mId) &&
+                Objects.equals(mTimeStamp, that.mTimeStamp);
+    }
 }
