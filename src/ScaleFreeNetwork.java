@@ -21,7 +21,7 @@ public class ScaleFreeNetwork {
 
 
     //COSTRUTTORE: prende come parametri nPeers, grandezza cache, e parametro p per creare Random Network
-    public ScaleFreeNetwork(int nPeers, int c, int pProb) throws IllegalArgumentException{
+    public ScaleFreeNetwork(int nPeers, int c, double pProb) throws IllegalArgumentException{
         if(nPeers < NINITIALNODES || c < 1 || pProb <= 0 || pProb > 1)
             throw new IllegalArgumentException("Wrong params");
 
@@ -33,7 +33,7 @@ public class ScaleFreeNetwork {
     }
 
     //Barabasi Albert alg. to generate a scale free network
-    protected void generateScaleFree(int pProb, int mC){
+    protected void generateScaleFree(double pProb, int mC){
         //Creo vettore di ID utile per ScaleFree
         mNetworkIDs = new Vector<>();
 
@@ -68,7 +68,7 @@ public class ScaleFreeNetwork {
     }
 
     //Erdos-Renyi model to build a random network
-    protected void generateRandomNetwork(int pProb, int mC){
+    protected void generateRandomNetwork(double pProb, int mC){
 
         //For each possible pair of peers (nInitialPeers)
         for (int i = 0; i < NINITIALNODES; i++) {
@@ -88,5 +88,26 @@ public class ScaleFreeNetwork {
             }
         }
 
+    }
+
+    /* GETTERS */
+
+    public int getmNPeers() {
+        return mNPeers;
+    }
+
+    public Vector<Peer> getmNetwork() {
+        return mNetwork;
+    }
+
+    //Restituisce la topology della rete (source, destination)
+    public StringBuilder getNetworkTopology(){
+        StringBuilder res = new StringBuilder();
+
+        for(Peer p: mNetwork){
+            res.append(p.getTopology());
+        }
+
+        return res;
     }
 }

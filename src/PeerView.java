@@ -67,6 +67,16 @@ public class PeerView {
         else return false;
     }
 
+    //Aggiunge un nodo alla view con timestamp corrente
+    boolean addViewEntryCurrentTime(Integer id, Integer currentTimestamp){
+        PeerViewEntry entry = new PeerViewEntry(id, currentTimestamp);
+
+        if(mCache != null)
+            return mCache.add(entry);
+
+        else return false;
+    }
+
     /* GETTERS */
     public int getmC() {
         return mC;
@@ -74,6 +84,17 @@ public class PeerView {
 
     public TreeSet<PeerViewEntry> getmCache() {
         return mCache;
+    }
+
+    public PeerView getCacheCopy(){
+        PeerView res = new PeerView(mC);
+
+        //Copia elemento per elemento nella peer view copia
+        for(PeerViewEntry entry: mCache){
+            res.addViewEntryCurrentTime(entry.getmId(), entry.getmTimeStamp());
+        }
+
+        return res;
     }
 
 

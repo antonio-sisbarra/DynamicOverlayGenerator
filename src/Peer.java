@@ -1,4 +1,3 @@
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Vector;
 
@@ -14,11 +13,44 @@ public class Peer {
     public Peer(int id, int c){
         mId = id;
         mC = c;
+
+        //Inizializzo la view
+        mView = new PeerView(mC);
     }
 
     //Aggiunge un peer alla view (default timestamp 0)
-    public boolean addNeighbor(int id){
+    boolean addNeighbor(int id){
         return mView.addViewEntry(id);
+    }
+
+    //Effettua lo scambio della view con un altro peer
+    void exchangeViews(Peer otherPeer, Integer currentTimestamp) {
+
+        //Costruisco cache da inviare al destinatario più fresh link che si riferisce a me
+        PeerView toSend = mView.getCacheCopy();
+        toSend.addViewEntryCurrentTime(mId, currentTimestamp);
+
+        //Mi serve la stessa cosa dall'other, anche io mi devo aggiornare
+        PeerView toReceive = otherPeer.getmView().getCacheCopy();
+        toReceive.addViewEntryCurrentTime(otherPeer.getmId(), currentTimestamp);
+
+        //Scambio le view, ogni peer fa merge per mantenere link più freschi
+        mView.mergeView(toReceive);
+        otherPeer.getmView().mergeView(toSend);
+    }
+
+    /* GETTERS */
+
+    public Integer getmId() {
+        return mId;
+    }
+
+    public PeerView getmView() {
+        return mView;
+    }
+
+    public int getmC() {
+        return mC;
     }
 
     //Restituisce la topology (source, destination) of node
