@@ -45,7 +45,7 @@ public class ScaleFreeNetwork {
         for(int i=NINITIALNODES; i<mNPeers; i++){
             newPeerToAdd = new Peer(i, mC);
 
-            int iNeighbor, idNeighbor;
+            int iNeighbor, idNeighbor, cEdgesAdded = 0;
             //Aggiungo m archi (numero fissato)
             for(int k=0; k<MEDGESTOADD; k++){
                 iNeighbor = new Random().nextInt(mNetworkIDs.size());
@@ -53,12 +53,16 @@ public class ScaleFreeNetwork {
 
                 //Aggiorno le view
                 newPeerToAdd.addNeighbor(idNeighbor);
-                mNetwork.elementAt(idNeighbor).addNeighbor(i);
+                if(mNetwork.elementAt(idNeighbor).addNeighbor(i))
+                    cEdgesAdded++;
 
                 //Aggiorno neighborIDs
                 mNetworkIDs.add(idNeighbor);
-                mNetworkIDs.add(i);
             }
+
+            //Aggiungo cedgesadded volte il nodo i alla lista ids (evito duplicates problem)
+            for(int j=0; j<cEdgesAdded; j++)
+                mNetworkIDs.add(i);
 
         }
     }

@@ -58,11 +58,13 @@ public class PeerView {
     }
 
     //Aggiunge un nodo alla view (default timestamp 0)
-    public void addViewEntry(Integer id){
+    public boolean addViewEntry(Integer id){
         PeerViewEntry entry = new PeerViewEntry(id, 0);
 
         if(mCache != null)
-            mCache.add(entry);
+            return mCache.add(entry);
+
+        else return false;
     }
 
     /* GETTERS */
