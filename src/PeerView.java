@@ -1,14 +1,17 @@
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.TreeSet;
+import java.util.Vector;
 
 /* INCAPSULA LA STRUTTURA DI UNA VIEW */
 public class PeerView {
 
     //Grandezza cache e cache (vector di coppie id,timestamp)
-    protected int mC;
-    protected TreeSet<PeerViewEntry> mCache;
+    private int mC;
+    private TreeSet<PeerViewEntry> mCache;
 
     //Costruttore 1: prende come parametro solo la grandezza della cache
-    public PeerView(int c){
+    PeerView(int c) {
         //Uso reverse order per avere ordinamento decrescente
         mCache = new TreeSet<>(Collections.reverseOrder());
 
@@ -25,7 +28,7 @@ public class PeerView {
     }
 
     //Restituisce un vector di peerId (i vicini)
-    protected Vector<Integer> getNeighbors(){
+    Vector<Integer> getNeighbors() {
         if(mCache == null) return null;
 
         Vector<Integer> neighborsId = new Vector<>(mC);
@@ -37,7 +40,7 @@ public class PeerView {
     }
 
     //Effettua il merge tra una view e l'attuale (scegliendo peer con timestamp più recente)
-    protected void mergeView(PeerView otherView){
+    void mergeView(PeerView otherView) {
         if(mCache == null || otherView == null || otherView.getmCache() == null)
             return;
 
@@ -58,7 +61,7 @@ public class PeerView {
     }
 
     //Aggiunge un nodo alla view (default timestamp 0)
-    public boolean addViewEntry(Integer id){
+    boolean addViewEntry(Integer id) {
         PeerViewEntry entry = new PeerViewEntry(id, 0);
 
         if(mCache != null)
@@ -86,7 +89,7 @@ public class PeerView {
         return mCache;
     }
 
-    public PeerView getCacheCopy(){
+    PeerView getCacheCopy() {
         PeerView res = new PeerView(mC);
 
         //Copia elemento per elemento nella peer view copia

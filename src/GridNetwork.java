@@ -4,13 +4,13 @@ import java.util.Vector;
 public class GridNetwork {
 
     //Numero di Peer nella rete
-    protected int mNPeers;
+    private int mNPeers;
 
     //Rete di Peer che formano la rete
-    protected Vector<Peer> mNetwork;
+    private Vector<Peer> mNetwork;
 
     //Costruttore ha come parametri numero di peer e grandezza view
-    public GridNetwork(int nPeers, int mC) throws IllegalArgumentException{
+    GridNetwork(int nPeers, int mC) throws IllegalArgumentException {
         if(nPeers < 1 || mC < 1)
             throw new IllegalArgumentException("Wrong params");
 
@@ -54,7 +54,7 @@ public class GridNetwork {
         return mNPeers;
     }
 
-    public Vector<Peer> getmNetwork() {
+    Vector<Peer> getmNetwork() {
         return mNetwork;
     }
 

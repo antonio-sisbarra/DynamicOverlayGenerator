@@ -5,12 +5,12 @@ import java.util.Vector;
 public class Peer {
 
     //Id e view del peer
-    protected Integer mId;
-    protected PeerView mView;
-    protected int mC;
+    private Integer mId;
+    private PeerView mView;
+    private int mC;
 
     //Costruttore prende come parametro l'id e la grandezza della view
-    public Peer(int id, int c){
+    Peer(int id, int c) {
         mId = id;
         mC = c;
 

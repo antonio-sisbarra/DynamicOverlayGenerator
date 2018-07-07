@@ -5,11 +5,10 @@ import java.util.Vector;
 public class DynamicOverlayGenMain {
 
     //The network
-    protected int mNPeers;
-    protected Vector<Peer> mPeers;
+    private Vector<Peer> mPeers;
 
     //Logic timestamp: parte da 1 (0 è l'inizio) e ad ogni passo si incrementa di 1
-    protected Integer mLogicTimestamp = 1;
+    private Integer mLogicTimestamp = 1;
 
     /* 2 costruttori: uno lavora su grid network, l'altro su scale free network */
 
@@ -17,7 +16,7 @@ public class DynamicOverlayGenMain {
     public DynamicOverlayGenMain(int nPeers, int nC){
 
         //Controllo semantica argomenti
-        if(!checkArgs(nPeers, nC, 0.5)){
+        if (wrongArgs(nPeers, nC, 0.5)) {
             System.err.println("------------------------------------------------------------------");
             System.err.println("Wrong semantic in args");
             System.err.println("------------------------------------------------------------------");
@@ -25,7 +24,6 @@ public class DynamicOverlayGenMain {
 
         //Costruisco la rete e prendo un riferimento ai peer
         GridNetwork network = new GridNetwork(nPeers, nC);
-        mNPeers = nPeers;
         mPeers = network.getmNetwork();
 
         /* DEBUG */
@@ -47,7 +45,7 @@ public class DynamicOverlayGenMain {
     public DynamicOverlayGenMain(int nPeers, int nC, double p){
 
         //Controllo semantica argomenti
-        if(!checkArgs(nPeers, nC, p)){
+        if (wrongArgs(nPeers, nC, p)) {
             System.err.println("------------------------------------------------------------------");
             System.err.println("Wrong semantic in args");
             System.err.println("------------------------------------------------------------------");
@@ -55,7 +53,6 @@ public class DynamicOverlayGenMain {
 
         //Costruisco la rete e prendo un riferimento ai peer
         ScaleFreeNetwork network = new ScaleFreeNetwork(nPeers, nC, p);
-        mNPeers = nPeers;
         mPeers = network.getmNetwork();
 
         /* DEBUG */
@@ -74,11 +71,8 @@ public class DynamicOverlayGenMain {
     }
 
     //Return false if there is a problem in args, true otherwise
-    private boolean checkArgs(int nPeers, int nC, double p){
-        if(nPeers < 1 || nC > nPeers || nC < 1 || p <= 0 || p > 1)
-            return false;
-        else
-            return true;
+    private boolean wrongArgs(int nPeers, int nC, double p) {
+        return nPeers < 1 || nC > nPeers || nC < 1 || p <= 0 || p > 1;
     }
 
     //Esegue il protocollo newscast su tutta la rete

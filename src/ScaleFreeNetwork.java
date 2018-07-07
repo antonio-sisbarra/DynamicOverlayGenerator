@@ -5,23 +5,23 @@ import java.util.Vector;
 public class ScaleFreeNetwork {
 
     //Nodi iniziali da avere nella scale free network (seed nodes)
-    protected static final int NINITIALNODES = 5;
+    private static final int NINITIALNODES = 5;
 
     //Archi da aggiungere per ogni nodo che vado ad aggiungere
-    protected static final int MEDGESTOADD = 2;
+    private static final int MEDGESTOADD = 2;
 
     //Numero di Peer nella rete
-    protected int mNPeers;
+    private int mNPeers;
 
     //Rete di Peer che formano la rete
-    protected Vector<Peer> mNetwork;
+    private Vector<Peer> mNetwork;
 
     //Vettore di id, utile per aggiungere nodi per avere scale free network
-    protected Vector<Integer> mNetworkIDs;
+    private Vector<Integer> mNetworkIDs;
 
 
     //COSTRUTTORE: prende come parametri nPeers, grandezza cache, e parametro p per creare Random Network
-    public ScaleFreeNetwork(int nPeers, int c, double pProb) throws IllegalArgumentException{
+    ScaleFreeNetwork(int nPeers, int c, double pProb) throws IllegalArgumentException {
         if(nPeers < NINITIALNODES || c < 1 || pProb <= 0 || pProb > 1)
             throw new IllegalArgumentException("Wrong params");
 
@@ -33,7 +33,7 @@ public class ScaleFreeNetwork {
     }
 
     //Barabasi Albert alg. to generate a scale free network
-    protected void generateScaleFree(double pProb, int mC){
+    private void generateScaleFree(double pProb, int mC) {
         //Creo vettore di ID utile per ScaleFree
         mNetworkIDs = new Vector<>();
 
@@ -68,7 +68,7 @@ public class ScaleFreeNetwork {
     }
 
     //Erdos-Renyi model to build a random network
-    protected void generateRandomNetwork(double pProb, int mC){
+    private void generateRandomNetwork(double pProb, int mC) {
 
         //For each possible pair of peers (nInitialPeers)
         for (int i = 0; i < NINITIALNODES; i++) {
@@ -96,12 +96,12 @@ public class ScaleFreeNetwork {
         return mNPeers;
     }
 
-    public Vector<Peer> getmNetwork() {
+    Vector<Peer> getmNetwork() {
         return mNetwork;
     }
 
     //Restituisce la topology della rete (source, destination)
-    public StringBuilder getNetworkTopology(){
+    StringBuilder getNetworkTopology() {
         StringBuilder res = new StringBuilder();
 
         for(Peer p: mNetwork){

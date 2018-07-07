@@ -3,29 +3,26 @@ import java.util.Objects;
 /* INCAPSULA LA COPPIA ID, TIMESTAMP; ORDINAMENTO DESCRESCENTE PER TIMESTAMP */
 public class PeerViewEntry implements Comparable<PeerViewEntry>{
 
-    Integer mId;
-    Integer mTimeStamp;
+    private Integer mId;
+    private Integer mTimeStamp;
 
-    public PeerViewEntry(int id, int timestmp){
+    PeerViewEntry(int id, int timestmp) {
         mId = id;
         mTimeStamp = timestmp;
     }
 
     /* GETTERS */
-    public int getmId() {
+    int getmId() {
         return mId;
     }
 
-    public int getmTimeStamp() {
+    int getmTimeStamp() {
         return mTimeStamp;
     }
 
     /* UTILE PER ORDINAMENTO NELLA PEERVIEW */
     @Override
     public int compareTo(PeerViewEntry o) {
-        /**Return a negative integer, zero, or a positive integer as this object
-         * is less than, equal to, or greater than the specified object.
-         **/
         if(mTimeStamp != null && o != null)
             //Se i timestamp sono diversi si ordina per timestamp, altrimenti per id
             if(mTimeStamp.compareTo(o.getmTimeStamp()) > 0 || mTimeStamp.compareTo(o.getmTimeStamp()) < 0)
