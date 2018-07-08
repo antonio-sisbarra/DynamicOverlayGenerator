@@ -128,7 +128,7 @@ public class DynamicOverlayGenMain {
                     new DynamicOverlayGenMain(Integer.parseInt(args[0]), Integer.parseInt(args[2]));
                 } else {
                     new DynamicOverlayGenMain(Integer.parseInt(args[0]), Integer.parseInt(args[2]),
-                            Integer.parseInt(args[3]));
+                            Double.parseDouble(args[3]));
                 }
             }
             catch(NumberFormatException e){

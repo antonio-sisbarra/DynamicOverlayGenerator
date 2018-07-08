@@ -43,25 +43,34 @@ public class ScaleFreeNetwork {
         Peer newPeerToAdd;
         //Aggiungo la restante parte di peer usando la procedura Barabasi-Albert
         for(int i=NINITIALNODES; i<mNPeers; i++){
-            newPeerToAdd = new Peer(i, mC);
 
-            int iNeighbor, idNeighbor, cEdgesAdded = 0;
+            //Aggiungo peer alla rete
+            newPeerToAdd = new Peer(i, mC);
+            mNetwork.insertElementAt(newPeerToAdd, i);
+
+            int iNeighbor, idNeighbor;
             //Aggiungo m archi (numero fissato)
             for(int k=0; k<MEDGESTOADD; k++){
-                iNeighbor = new Random().nextInt(mNetworkIDs.size());
-                idNeighbor = mNetworkIDs.elementAt(iNeighbor);
 
-                //Aggiorno le view
+                //Devo aggiungere per forza m archi, se seleziono duplicato ci riprovo
+                boolean isAdded;
+                do {
+                    iNeighbor = new Random().nextInt(mNetworkIDs.size());
+                    idNeighbor = mNetworkIDs.elementAt(iNeighbor);
+
+                    isAdded = mNetwork.elementAt(idNeighbor).addNeighbor(i);
+                }
+                while (!isAdded);
+
+                //Aggiorno la view del nuovo peer
                 newPeerToAdd.addNeighbor(idNeighbor);
-                if(mNetwork.elementAt(idNeighbor).addNeighbor(i))
-                    cEdgesAdded++;
 
                 //Aggiorno neighborIDs
                 mNetworkIDs.add(idNeighbor);
             }
 
             //Aggiungo cedgesadded volte il nodo i alla lista ids (evito duplicates problem)
-            for(int j=0; j<cEdgesAdded; j++)
+            for (int j = 0; j < MEDGESTOADD; j++)
                 mNetworkIDs.add(i);
 
         }
@@ -69,12 +78,13 @@ public class ScaleFreeNetwork {
 
     //Erdos-Renyi model to build a random network
     private void generateRandomNetwork(double pProb, int mC) {
+        //Creo peer di id i
+        for (int i = 0; i < NINITIALNODES; i++) {
+            mNetwork.insertElementAt(new Peer(i, mC), i);
+        }
 
         //For each possible pair of peers (nInitialPeers)
         for (int i = 0; i < NINITIALNODES; i++) {
-            //Creo peer di id i
-            mNetwork.insertElementAt(new Peer(i, mC), i);
-
             for (int j = i + 1; j < NINITIALNODES; j++) {
                 //Add a connection with p probability
                 if (Math.random() <= pProb) {
