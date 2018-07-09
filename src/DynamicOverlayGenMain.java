@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Vector;
 
@@ -10,10 +13,18 @@ public class DynamicOverlayGenMain {
     //Logic timestamp: parte da 1 (0 è l'inizio) e ad ogni passo si incrementa di 1
     private Integer mLogicTimestamp = 1;
 
+    //Per scrivere una topologia di rete su file
+    private String GRIDTOPOLOGYFILENAME = "GridTopology";
+    private String SCALEFREETOPOLOGYFILENAME = "ScaleFreeTopology";
+    private String GENERATEDTOPOLOGYFILENAME = "GeneratedTopology";
+    private FileWriter mTopologyFW;
+    private PrintWriter mTopologyPW;
+
+
     /* 2 costruttori: uno lavora su grid network, l'altro su scale free network */
 
     //Costruttore per gridtable -> ha bisogno solo di npeers e c (grandezza cache)
-    public DynamicOverlayGenMain(int nPeers, int nC){
+    private DynamicOverlayGenMain(int nPeers, int nC) throws IOException {
 
         //Controllo semantica argomenti
         if (wrongArgs(nPeers, nC, 0.5)) {
@@ -23,26 +34,32 @@ public class DynamicOverlayGenMain {
         }
 
         //Costruisco la rete e prendo un riferimento ai peer
+        System.out.println("I'm building the grid network...");
         GridNetwork network = new GridNetwork(nPeers, nC);
         mPeers = network.getmNetwork();
 
-        /* DEBUG */
-        for(Peer pToStamp: mPeers){
-            System.out.println(pToStamp.getTopology());
-        }
+        //Stampo topologia rete di partenza su disco
+        System.out.println("I'm saving the grid network on file...");
+        GRIDTOPOLOGYFILENAME = GRIDTOPOLOGYFILENAME.concat(nPeers + "nodes.csv");
+        mTopologyFW = new FileWriter(GRIDTOPOLOGYFILENAME);
+        mTopologyPW = new PrintWriter(mTopologyFW);
+        printNetworkOnFile(mPeers, mTopologyPW);
 
         //Eseguo il protocollo newscast
+        System.out.println("I'm executing the protocol on the network...");
         executeNewscastProtocol(mPeers);
 
-        //TODO: SCRIVO RETE SU DISCO
-        /* DEBUG */
-        for(Peer pToSTamp: mPeers){
-            System.out.println(pToSTamp.getTopology());
-        }
+        //Stampo rete creata su disco
+        System.out.println("I'm saving the generated network on file...");
+        GENERATEDTOPOLOGYFILENAME = GENERATEDTOPOLOGYFILENAME.concat(nPeers + "nodes" + nC + "cache.csv");
+        mTopologyFW = new FileWriter(GENERATEDTOPOLOGYFILENAME);
+        mTopologyPW = new PrintWriter(mTopologyFW);
+        printNetworkOnFile(mPeers, mTopologyPW);
+
     }
 
     //Costruttore per scalefree -> ha bisogno di npeers, di c, e di p per BA alg.
-    public DynamicOverlayGenMain(int nPeers, int nC, double p){
+    private DynamicOverlayGenMain(int nPeers, int nC, double p) throws IOException {
 
         //Controllo semantica argomenti
         if (wrongArgs(nPeers, nC, p)) {
@@ -52,22 +69,27 @@ public class DynamicOverlayGenMain {
         }
 
         //Costruisco la rete e prendo un riferimento ai peer
+        System.out.println("I'm building the ScaleFree network...");
         ScaleFreeNetwork network = new ScaleFreeNetwork(nPeers, nC, p);
         mPeers = network.getmNetwork();
 
-        /* DEBUG */
-        for(Peer pToStamp: mPeers){
-            System.out.println(pToStamp.getTopology());
-        }
+        //Stampo topologia rete di partenza su disco
+        System.out.println("I'm saving the ScaleFree network on file...");
+        SCALEFREETOPOLOGYFILENAME = SCALEFREETOPOLOGYFILENAME.concat(nPeers + "nodes.csv");
+        mTopologyFW = new FileWriter(SCALEFREETOPOLOGYFILENAME);
+        mTopologyPW = new PrintWriter(mTopologyFW);
+        printNetworkOnFile(mPeers, mTopologyPW);
 
         //Eseguo il protocollo newscast
+        System.out.println("I'm executing the protocol on the network...");
         executeNewscastProtocol(mPeers);
 
-        //TODO: SCRIVO RETE SU DISCO
-        /* DEBUG */
-        for(Peer pToStamp: mPeers){
-            System.out.println(pToStamp.getTopology());
-        }
+        //Stampo rete creata su disco
+        System.out.println("I'm saving the generated network on file...");
+        GENERATEDTOPOLOGYFILENAME = GENERATEDTOPOLOGYFILENAME.concat(nPeers + "nodes" + nC + "cache.csv");
+        mTopologyFW = new FileWriter(GENERATEDTOPOLOGYFILENAME);
+        mTopologyPW = new PrintWriter(mTopologyFW);
+        printNetworkOnFile(mPeers, mTopologyPW);
     }
 
     //Return false if there is a problem in args, true otherwise
@@ -121,8 +143,7 @@ public class DynamicOverlayGenMain {
             System.err.println("s stands for scalefree and it needs also p, param for BA algorithm");
             System.err.println("c is the number of items in the cache of each peer");
             System.err.println("------------------------------------------------------------------");
-        }
-        else{
+        } else {
             try {
                 if (args.length == 3) {
                     new DynamicOverlayGenMain(Integer.parseInt(args[0]), Integer.parseInt(args[2]));
@@ -130,14 +151,32 @@ public class DynamicOverlayGenMain {
                     new DynamicOverlayGenMain(Integer.parseInt(args[0]), Integer.parseInt(args[2]),
                             Double.parseDouble(args[3]));
                 }
-            }
-            catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.err.println("------------------------------------------------------------------");
                 System.err.println("Error in params format");
+                System.err.println("------------------------------------------------------------------");
+            } catch (IOException e) {
+                System.err.println("------------------------------------------------------------------");
+                System.err.println("Error in IO operation");
                 System.err.println("------------------------------------------------------------------");
             }
         }
 
 
+    }
+
+    //Salva la topologia di una rete su disco
+    private void printNetworkOnFile(Vector<Peer> peers, PrintWriter pw) {
+
+        //Stampo le etichette di titolo source , dest
+        pw.println("Source,Target");
+
+        //Ciclo su ogni nodo e stampo la sua topology (view)
+        for (Peer pToStamp : peers) {
+            pw.print(pToStamp.getTopology());
+        }
+
+        //Chiudo file
+        pw.close();
     }
 }

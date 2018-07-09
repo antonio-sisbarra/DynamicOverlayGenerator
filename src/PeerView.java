@@ -9,13 +9,15 @@ public class PeerView {
     //Grandezza cache e cache (vector di coppie id,timestamp)
     private int mC;
     private TreeSet<PeerViewEntry> mCache;
+    private Integer mIdOwner;
 
-    //Costruttore 1: prende come parametro solo la grandezza della cache
-    PeerView(int c) {
+    //Costruttore 1: prende come parametro solo la grandezza della cache e l'id del peer proprietario della view
+    PeerView(int c, int idOwner) {
         //Uso reverse order per avere ordinamento decrescente
         mCache = new TreeSet<>(Collections.reverseOrder());
 
         mC = c;
+        mIdOwner = idOwner;
     }
 
     //Costruttore 2: prende come parametro la grandezza della cache e una map di vicini (con timestamp già settati)
@@ -49,6 +51,10 @@ public class PeerView {
         mCache.addAll(otherView.getmCache());
         int countInserted = 0;
         for(PeerViewEntry e: mCache){
+            //Nella fase di merge non inserisco me stesso, info inutile
+            if (e.getmId() == mIdOwner)
+                continue;
+
             newCacheAfterMerge.add(e);
             countInserted++;
 
@@ -90,7 +96,7 @@ public class PeerView {
     }
 
     PeerView getCacheCopy() {
-        PeerView res = new PeerView(mC);
+        PeerView res = new PeerView(mC, mIdOwner);
 
         //Copia elemento per elemento nella peer view copia
         for(PeerViewEntry entry: mCache){

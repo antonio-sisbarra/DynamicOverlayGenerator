@@ -15,7 +15,7 @@ public class Peer {
         mC = c;
 
         //Inizializzo la view
-        mView = new PeerView(mC);
+        mView = new PeerView(mC, mId);
     }
 
     //Aggiunge un peer alla view (default timestamp 0)
