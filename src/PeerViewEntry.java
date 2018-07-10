@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-/* INCAPSULA LA COPPIA ID, TIMESTAMP; ORDINAMENTO DESCRESCENTE PER TIMESTAMP */
+/* INCAPSULA LA COPPIA ID, TIMESTAMP; ORDINAMENTO DECRESCENTE PER TIMESTAMP */
 public class PeerViewEntry implements Comparable<PeerViewEntry>{
 
     private Integer mId;

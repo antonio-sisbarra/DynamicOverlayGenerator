@@ -41,15 +41,15 @@ public class Peer {
 
     /* GETTERS */
 
-    public Integer getmId() {
+    Integer getmId() {
         return mId;
     }
 
-    public PeerView getmView() {
+    PeerView getmView() {
         return mView;
     }
 
-    public int getmC() {
+    int getmC() {
         return mC;
     }
 

@@ -100,6 +100,8 @@ public class DynamicOverlayGenMain {
     //Esegue il protocollo newscast su tutta la rete
     private void executeNewscastProtocol(Vector<Peer> peers){
 
+        System.out.println("Current timestamp: " + mLogicTimestamp);
+
         //Per ogni peer eseguo il protocollo
         for(Peer p: peers){
             Peer otherPeer;
@@ -110,6 +112,7 @@ public class DynamicOverlayGenMain {
             } while (otherPeer.equals(p));
 
             //Aggiorno le view dei due peer
+            System.out.println("Exchanging views between peers: " + p.getmId() + ", " + otherPeer.getmId());
             updateState(p, otherPeer);
 
             //Incremento il timestamp

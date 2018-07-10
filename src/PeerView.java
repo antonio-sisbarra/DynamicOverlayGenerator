@@ -1,4 +1,3 @@
-import java.util.Collection;
 import java.util.Collections;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -18,15 +17,6 @@ public class PeerView {
 
         mC = c;
         mIdOwner = idOwner;
-    }
-
-    //Costruttore 2: prende come parametro la grandezza della cache e una map di vicini (con timestamp già settati)
-    public PeerView(int c, Collection<PeerViewEntry> neighbors){
-        //Uso reverse order per avere ordinamento decrescente
-        mCache = new TreeSet<>(Collections.reverseOrder());
-        mCache.addAll(neighbors);
-
-        mC = c;
     }
 
     //Restituisce un vector di peerId (i vicini)
